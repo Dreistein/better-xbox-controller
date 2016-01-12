@@ -1,24 +1,17 @@
 EventEmitter = require 'events'
+Stick = require './stick'
 fs = require 'fs'
 config = JSON.parse fs.readFileSync __dirname + '/config.json'
 
 createStateObject = () ->
   data = {
     button: {}
-    trigger: {
+    trigger:
       r: 0x00
       l:0x00
-    }
-    stick: {
-      r: {
-        x:0x0000
-        y:0x0000
-      }
-      l: {
-        x:0x0000
-        y:0x0000
-      }
-    }
+    stick:
+      r: new Stick 0, 0
+      l: new Stick 0, 0
   }
   for k,v of config.button
     data.button[k] = false
@@ -28,7 +21,6 @@ createStateObject = () ->
 class XBoxController extends EventEmitter
   constructor: (@device) ->
     @dead = 6000
-    @LED = config.led
 
   open: () =>
     if not @device?
@@ -88,20 +80,20 @@ class XBoxController extends EventEmitter
       y = data.readInt16LE(8)
       if @dead > Math.sqrt x*x+y*y
         x = y = 0
-      if @state.stick.l.x isnt x or @state.stick.l.y isnt y
-        @state.stick.l.x = x
-        @state.stick.l.y = y
-        @emit 'stick:left', {x:x,y:y}
+      stick = new Stick x,y
+      if not stick.isEqual @state.stick.l
+        @state.stick.l = stick
+        @emit 'stick:left', stick
         stickChange = true
 
       x = data.readInt16LE(10)
       y = data.readInt16LE(12)
       if @dead > Math.sqrt x*x+y*y
         x = y = 0
-      if @state.stick.r.x isnt x or @state.stick.r.y isnt y
-        @state.stick.r.x = x
-        @state.stick.r.y = y
-        @emit 'stick:right', {x:x,y:y}
+      stick = new Stick x,y
+      if not stick.isEqual @state.stick.r
+        @state.stick.r = stick
+        @emit 'stick:right', stick
         stickChange = true
 
       if stickChange
@@ -129,6 +121,9 @@ class XBoxController extends EventEmitter
     @device.close()
 
   setLed: (state) =>
+    state = config.led[state]
+    if not state?
+      throw new Error "Unknown LED state! '#{state}'"
     buf = new Buffer [0x01,0x03,state]
     @_sendData buf
 

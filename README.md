@@ -55,7 +55,7 @@ Emitted when a button state changes.
 - `key`: String representing the button
 - `status`: Whether the button is pressed or not
 
-## Event: button:<key>(status)
+## Event: button:key(status)
 Emitted when a specific button is pressed where `<key>` is one of the button keys.
 
 - `status`: Whether the button is pressed or not
@@ -68,7 +68,7 @@ Emitted when one of the trigger changes.
 
 - `triggerValues`: An Object containing the current trigger values with properties `r` and `l`.
 
-## Event: trigger:<side>(triggerValue)
+## Event: trigger:side(triggerValue)
 Emitted when a specific trigger changes. `<side>` is either `left` or `right`.
 
 - `triggerValue`: The current value of the trigger.
@@ -91,7 +91,7 @@ Emitted when one of the sticks change. The object has the following structure:
 
 - `stickValues`: The current stick values.
 
-## Event: stick:<side>(stickValue)
+## Event: stick:side(stickValue)
 Emitted when a specific stick changes where `<side>` is either `right` or `left`.
 
 - `stickValue`: Object with x and y properties representing the stick state.
@@ -100,11 +100,7 @@ LEDs
 ----
 The leds of the controller can be changed to a specific state or pattern.
 
-## .setLed(state)
-Use the `XBoxController.setLed(state)` method to send a request to the xBox controller.
-
-States are numeric constants, set in the `XBoxController.LED` object.
-The `.LED` object contains the following properties:
+The xBox 360 controller implements the following states and pattern:
 * ALL_OFF
 * ALL_BLINKING
 * FLASH_AND_LED_1
@@ -119,6 +115,11 @@ The `.LED` object contains the following properties:
 * BLINKING
 * SLOW_BLINKING
 * ALTERNATING
+
+## .setLed(state)
+Method to send a request to the xBox controller.
+
+- `state`: One of the possible states as String.
 
 ## Event: led(state)
 This event is sent by the xBox controller when the state of the LED changes.

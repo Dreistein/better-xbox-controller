@@ -1,6 +1,6 @@
 {
   "name": "better-xbox-controller",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Library for easy access to XBox 360 Controller",
   "keywords": [
     "xbox",
@@ -10,9 +10,11 @@
   ],
   "main": "src/controller",
   "scripts": {
-    "build":"coffee -c src/*.coffee",
-    "pretest":"npm run-script build",
-    "test": "node src/example"
+    "build": "coffee -c src/*.coffee",
+    "clean": "rm src/*.js",
+    "pretest": "npm run-script build",
+    "test": "node example/example",
+    "prepublish": "npm run-script build"
   },
   "author": "Stefan Steininger",
   "repository": {
