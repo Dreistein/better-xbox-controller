@@ -1,0 +1,35 @@
+{
+  "button": {
+    "start": 4096,
+    "back": 8192,
+    "leftStick": 16384,
+    "rightStick": 32768,
+    "padUp": 256,
+    "padDown": 512,
+    "padLeft": 1024,
+    "padRight": 2048,
+    "a": 16,
+    "b": 32,
+    "x": 64,
+    "y": 128,
+    "leftBack": 1,
+    "rightBack": 2,
+    "xBox": 4
+  },
+  "led": {
+    "ALL_OFF":0,
+    "ALL_BLINKING":1,
+    "FLASH_AND_LED_1":2,
+    "FLASH_AND_LED_2":3,
+    "FLASH_AND_LED_3":4,
+    "FLASH_AND_LED_4":5,
+    "LED_1":6,
+    "LED_2":7,
+    "LED_3":8,
+    "LED_4":9,
+    "ROTATING":10,
+    "BLINKING":11,
+    "SLOW_BLINKING":12,
+    "ALTERNATING":13
+  }
+}

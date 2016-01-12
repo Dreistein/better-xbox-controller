@@ -1,0 +1,26 @@
+{
+  "name": "better-xbox-controller",
+  "version": "1.0.0",
+  "description": "Library for easy access to XBox 360 Controller",
+  "keywords": [
+    "xbox",
+    "360",
+    "controller",
+    "usb"
+  ],
+  "main": "src/controller",
+  "scripts": {
+    "build":"coffee -c src/*.coffee",
+    "pretest":"npm run-script build",
+    "test": "node src/example"
+  },
+  "author": "Stefan Steininger",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dreistein/better-xbox-controller"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "usb": "^1.1.1"
+  }
+}
