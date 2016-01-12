@@ -64,8 +64,8 @@ class XBoxController extends EventEmitter
         #console.log k, actual
         if @state.button[k] isnt actual
           @state.button[k] = actual
-          event = 'button:' + k + if actual then ':press' else ':release'
-          @emit event
+          event = 'button:' + k
+          @emit event, actual
           @emit 'button', k, actual
           buttonChange = true
 
