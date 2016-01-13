@@ -1,6 +1,6 @@
 {
   "name": "better-xbox-controller",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Library for easy access to XBox 360 Controller",
   "keywords": [
     "xbox",
@@ -10,8 +10,8 @@
   ],
   "main": "src/controller",
   "scripts": {
-    "build": "coffee -c src/*.coffee",
-    "clean": "rm src/*.js",
+    "build": "coffee -c src/*.coffee && coffee -c example/*.coffee",
+    "clean": "rm src/*.js && rm example/*.js",
     "pretest": "npm run-script build",
     "test": "node example/example",
     "prepublish": "npm run-script build"

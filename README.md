@@ -1,10 +1,10 @@
 XBox 360 Controller Library for Node.JS
 =========================================
-XBox 360 Library inspired by the [node-xbox-controller](https://github.com/andrew/node-xbox-controller) library written in CoffeeScript / JavaScript.
+XBox 360 Library inspired by the [node-xbox-controller](https://github.com/andrew/node-xbox-controller) library (basically a windows/linux port) written in CoffeeScript / JavaScript.
 
 The library is completely event-driven and based on libusb / [node-usb](https://github.com/nonolith/node-usb). Future releases will add support for an easy way of detecting controller.
 
-Also note that there are still a lot of improvements to be done. Hang in there, I'll do my best.
+Also note that there are still a lot of improvements to be done and that the API is undergoing rapid developement. Things may break. Hang in there, I'll do my best.
 
 Installation
 ============
@@ -24,7 +24,15 @@ var USB = require('usb');
 
 var device = USB.findByIds(0x045e,0x028e);
 var controller = new XBoxController(device);
+
+// setting event handlers
+
+//open the controller
+controller.open()
 ```
+
+See also the [example code](https://github.com/Dreistein/better-xbox-controller/blob/master/example/example.coffee) (written in CoffeeScript)
+
 
 Inputs
 --------------
@@ -56,7 +64,7 @@ Emitted when a button state changes.
 - `status`: Whether the button is pressed or not
 
 ## Event: button:key(status)
-Emitted when a specific button is pressed where `<key>` is one of the button keys.
+Emitted when a specific button is pressed where `<key>` is one of the button constants.
 
 - `status`: Whether the button is pressed or not
 
@@ -74,27 +82,28 @@ Emitted when a specific trigger changes. `<side>` is either `left` or `right`.
 - `triggerValue`: The current value of the trigger.
 
 # Sticks
-There exist two sticks on the controller. Each of the sticks has signed 16 bit x and y properties.
+There exist two sticks on the controller. Each of the sticks has signed 16 bit x and y properties. The events use a XBoxStick object for easier handling.
 
-## Event: stick(stickValues)
-Emitted when one of the sticks change. The object has the following structure:
-```javascript
-{
-  r: {
-    x,y
-  },
-  l: {
-    x,y
-  }
-}
-```
+The controller class also supports dead zones for the sticks. By default it's set to 6000 but can be changed by accessing the `dead` property. Every length below the dead zone value will be treated as 0 in x and y direction. Likewise you can disable the feature by setting `dead` to 0.
 
-- `stickValues`: The current stick values.
+## Event: stick(stickValues : XBoxStick)
+Emitted when one of the sticks change.
+
+- `stickValues`: An Object with two XBoxStick objects (properties `l` and `r`).
 
 ## Event: stick:side(stickValue)
 Emitted when a specific stick changes where `<side>` is either `right` or `left`.
 
-- `stickValue`: Object with x and y properties representing the stick state.
+- `stickValue`: XBoxStick object representing the stick state.
+
+## Class XBoxStick
+Convenience class containing the stick values. The class has two properties `x` and `y`. Additionally the class has two methods to calculate the length and angle of the vector.
+
+### .getLength()
+Calculates and returns the length of the vector.
+
+### .getAngle()
+Calculates and returns the angle of the vector in degrees.
 
 LEDs
 ----

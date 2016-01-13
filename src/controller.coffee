@@ -22,6 +22,11 @@ class XBoxController extends EventEmitter
   constructor: (@device) ->
     @dead = 6000
 
+    # convinience property to not break old API
+    @LED = {}
+    for k,v of config.led
+      @LED[k] = k
+
   open: () =>
     if not @device?
       return @emit 'error', 'No Controller Set!'

@@ -1,41 +1,48 @@
-XBoxController = require './controller'
+XBoxController = require '../src/controller'
 USB = require 'usb'
 
-dev = USB.findByIds(1118,654)
+# searching for an official xBox 360 controller
+device = USB.findByIds(1118,654)
+controller = new XBoxController device
 
-cont = new XBoxController dev
-
-cont.on 'button', (key, val) ->
+# handling button events and setting the leds to corresponding pattern
+controller.on 'button', (key, val) ->
   console.log "Button #{key} has been " + if val then 'pressed' else 'released'
   if val
-    if key is 'leftStick'
-      cont.setLed cont.LED.ALL_OFF
-    if key is 'a'
-      cont.setLed cont.LED.LED_1
-    if key is 'b'
-      cont.setLed cont.LED.LED_2
-    if key is 'y'
-      cont.setLed cont.LED.LED_3
-    if key is 'x'
-      cont.setLed cont.LED.LED_4
-    if key is 'xBox'
-      cont.setLed cont.LED.ALTERNATING
-    if key is 'start'
-      cont.setLed cont.LED.ROTATING
-    if key is 'back'
-      cont.setLed cont.LED.BLINKING
+    switch key
+      when 'a' then controller.setLed 'LED_1'
+      when 'b' then controller.setLed 'LED_2'
+      when 'y' then controller.setLed 'LED_3'
+      when 'x' then controller.setLed 'LED_4'
+      when 'xBox' then controller.setLed 'ALTERNATING'
+      when 'start' then controller.setLed 'ROTATING'
+      when 'back' then controller.setLed 'BLINKING'
+      else controller.setLed 'ALL_OFF'
 
-cont.on 'trigger', (val) ->
+# getting trigger values and using them for rumbler speeds
+controller.on 'trigger', (val) ->
   console.log "Trigger: right:#{val.r}\tleft:#{val.l}"
-  cont.setRumbler val.l,val.r
+  controller.setRumbler val.l,val.r
 
-cont.on 'stick:left', (val) ->
-  console.log "Left Stick: {x:#{val.x},\ty:#{val.y}}"
+# Setting custom dead zone for sticks
+controller.dead = 10000
 
-cont.on 'stick:right', (val) ->
-  console.log "Right Stick: {x:#{val.x},\ty:#{val.y}}"
+# just print the values of the sticks
+stick = (side, val) ->
+  length = val.getLength().toFixed 2
+  angle = val.getAngle().toFixed 2
+  console.log "#{side} stick: {x:#{val.x},\ty:#{val.y}};\t" +
+    "{l:#{length},\ta:#{angle}°}"
 
-cont.on 'error', (err) ->
-  console.log err
+controller.on 'stick:left', (val) ->
+  stick('left', val)
 
-cont.open()
+controller.on 'stick:right', (val) ->
+  stick('right', val)
+
+# in case of errors, print them
+controller.on 'error', (err) ->
+  console.error  err
+
+# finally open the controller
+controller.open()

@@ -5,7 +5,8 @@ class XBoxStick
     Math.sqrt @x*@x + @y*@y
 
   getAngle: () =>
-    Math.atan2 @y, @x
+    d = Math.atan2 @y, @x
+    return (if d > 0 then d else 2*Math.PI+d) * 360 / (2* Math.PI)
 
   isEqual: (stick) =>
     if stick instanceof XBoxStick
